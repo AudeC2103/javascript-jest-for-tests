@@ -1,31 +1,43 @@
-/* EXAMPLE OF AN API REQUEST */
+// Objectif:
+// Récupérer des données météorologiques via une API et les afficher sur la page.
 
-/*
-let longitude = 44.83; // Bordeaux longitude
-let latitude = -0.57; // Bordeaux latitude
-let api_key = '891fcaaa0f613df11046ed15bd1a4607'; // Teacher's API Key
-let api_url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${api_key}`; // API URL
+// Étapes:
+// Créez une fonction fetchData dans le fichier ex4.js pour récupérer les données de l'API.
+// Créez une fonction displayData pour afficher les données récupérées sur la page.
+// Ajoutez un écouteur d'événement DOMContentLoaded pour charger les données lorsque la page est prête.
 
-const getWeather = () => {
-  axios.get(api_url)
-  .then((response)=>console.log(response.data.main.temp - 273.15))
-  .catch((err)=> console.log(err))
-}
-getWeather();
-*/
+import axios from 'axios';
 
+// Coordonnées de Bordeaux et clé API
+const longitude = 44.83;
+const latitude = -0.57;
+const api_key = '891fcaaa0f613df11046ed15bd1a4607';
+const api_url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${api_key}`;
 
-
-
+// Fonction pour récupérer les données météorologiques
 export const fetchData = async () => {
-    // Your code here: Implement an API request (e.g., fetch data from a fictional API).
-  };
-  
-  // script.js
-  import { fetchData } from './ex4';
-  
-  function displayData() {
-    // Your code here: Fetch and display data from the API using fetchData.
-  }
-  
-  document.addEventListener('DOMContentLoaded', displayData);
+    try {
+        const response = await axios.get(api_url);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des données:', error);
+        return null;
+    }
+};
+
+// Fonction pour afficher les données sur la page
+const displayData = async () => {
+    const data = await fetchData();
+    console.log(data)
+    if (data) {
+        const weatherDataDiv = document.getElementById('weather-data');
+        weatherDataDiv.innerHTML = `
+            <h3>Météo à Bordeaux</h3>
+            <p>Température : ${(data.main.temp - 273.15).toFixed(2)}°C</p>
+            <p>Humidité : ${data.main.humidity}%</p>
+        `;
+    }
+};
+
+// Ajoute un écouteur d'événement pour charger les données lorsque la page est prête
+document.addEventListener('DOMContentLoaded', displayData);

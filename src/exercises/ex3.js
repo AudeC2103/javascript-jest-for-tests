@@ -16,11 +16,13 @@ function initializeValidation() {
     }
   }
 
-  // Ajouter un événement lors de la soumission du formulaire
-  emailForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    validateEmail();
-  });
+  if (emailForm) {
+    // Ajouter un événement lors de la soumission du formulaire
+    emailForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      validateEmail();
+    });
+  }
 
   return { validateEmail };
 }
